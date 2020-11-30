@@ -17,6 +17,7 @@ import {
 	withOptionsHydration,
 } from '@woocommerce/data';
 import { recordPageView } from '@woocommerce/tracks';
+import '@woocommerce/notices'; // best way?
 
 /**
  * Internal dependencies
