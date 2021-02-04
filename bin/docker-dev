@@ -1,3 +1,0 @@
-#!/usr/bin/env node
-'use strict'
-require('../docker/wc-admin-docker-dev/cli')().parse( process.argv.slice(2) );
