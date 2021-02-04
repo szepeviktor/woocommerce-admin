@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-const yargs = require( 'yargs' );
-
+const yargs = require( 'yargs' ).strict();
 const path = require( 'path' );
 const execSync = require( 'child_process' ).execSync;
 const cwd = require( 'path' ).dirname( require.main.filename );
@@ -12,6 +11,7 @@ const crypto = require( 'crypto' );
  * Internal dependencies
  **/
 const commands = require( './commands' );
+const run = require( './run' );
 
 const configPath = path.resolve( `${ cwd }/../.wp-env.json` );
 const wpEnvHash = crypto
@@ -26,19 +26,15 @@ const containerId = execSync(
 	.trim();
 
 module.exports = function cli() {
-	yargs.option( 'debug', {
-		type: 'boolean',
-		describe: 'Enable debug output.',
-		default: false,
-	} );
-
-	yargs.command( {
-		command: 'ssh',
-		describe: 'SSH into the running container',
-		handler() {
-			commands.ssh( containerId );
-		},
-	} );
-
+	for ( const i in commands ) {
+		const command = commands[ i ];
+		yargs.command( {
+			command: i,
+			describe: command.describe,
+			handler() {
+				run( containerId, command.commands );
+			},
+		} );
+	}
 	return yargs;
 };
